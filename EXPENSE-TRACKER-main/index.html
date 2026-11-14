@@ -1,0 +1,358 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SpendWise — Premium 3D Financial Control Platform</title>
+    <meta
+      name="description"
+      content="A premium 3D personal finance, intelligent banking simulation, and expense tracking platform."
+    />
+    <meta property="og:title" content="SpendWise — Premium 3D Financial Control Platform" />
+    <meta
+      property="og:description"
+      content="A premium 3D personal finance, intelligent banking simulation, and expense tracking platform."
+    />
+    <meta property="og:type" content="website" />
+    <link rel="icon" type="image/svg+xml" href="./assets/logo.svg" />
+
+    <!-- Typography: Plus Jakarta Sans (Display & Body), JetBrains Mono (Tabular Figures) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="./css/style.css" />
+    <link rel="stylesheet" href="./css/homepage.css" />
+
+    <!-- Chart.js & Lucide Icons via CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js" defer></script>
+    <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js" defer></script>
+  </head>
+  <body>
+    <div class="app-shell">
+      <!-- Mobile Backdrop -->
+      <div id="sidebar-backdrop" class="sidebar-backdrop" hidden></div>
+
+      <!-- Sidebar Navigation -->
+      <aside id="app-sidebar" class="sidebar" aria-label="Primary Navigation">
+        <div class="sidebar-brand">
+          <img src="./assets/logo.svg" alt="SpendWise mark" class="brand-logo" width="28" height="28" />
+          <span class="brand-name">SpendWise</span>
+        </div>
+
+        <nav class="sidebar-nav">
+          <button type="button" class="nav-item" data-view="home">
+            <i data-lucide="sparkles" class="nav-icon" aria-hidden="true"></i>
+            <span>Homepage</span>
+          </button>
+          <button
+            type="button"
+            class="nav-item is-active"
+            data-view="dashboard"
+            aria-current="page"
+          >
+            <i data-lucide="layout-dashboard" class="nav-icon" aria-hidden="true"></i>
+            <span>Dashboard</span>
+          </button>
+          <button type="button" class="nav-item" data-view="transactions">
+            <i data-lucide="arrow-left-right" class="nav-icon" aria-hidden="true"></i>
+            <span>Transactions</span>
+          </button>
+          <button type="button" class="nav-item" data-view="analytics">
+            <i data-lucide="bar-chart-3" class="nav-icon" aria-hidden="true"></i>
+            <span>Analytics</span>
+          </button>
+          <button type="button" class="nav-item" data-view="budget">
+            <i data-lucide="wallet" class="nav-icon" aria-hidden="true"></i>
+            <span>Budget</span>
+          </button>
+          <button type="button" class="nav-item" data-view="bank">
+            <i data-lucide="building-2" class="nav-icon" aria-hidden="true"></i>
+            <span>Smart Bank Connect</span>
+          </button>
+          <button type="button" class="nav-item" data-view="guardian">
+            <i data-lucide="shield" class="nav-icon" aria-hidden="true"></i>
+            <span>Money Guardian</span>
+          </button>
+          <button type="button" class="nav-item" data-view="bills">
+            <i data-lucide="receipt" class="nav-icon" aria-hidden="true"></i>
+            <span>Bills & Subscriptions</span>
+          </button>
+          <button type="button" class="nav-item" data-view="goals">
+            <i data-lucide="target" class="nav-icon" aria-hidden="true"></i>
+            <span>Savings Goals</span>
+          </button>
+          <button type="button" class="nav-item" data-view="settings">
+            <i data-lucide="sliders" class="nav-icon" aria-hidden="true"></i>
+            <span>Settings</span>
+          </button>
+        </nav>
+
+        <div class="sidebar-footer">
+          <div class="sidebar-section-label">Data Tools</div>
+          <div class="sidebar-actions">
+            <button type="button" id="btn-export-csv" class="utility-btn">
+              <i data-lucide="download" class="utility-icon" aria-hidden="true"></i>
+              <span>Export CSV</span>
+            </button>
+            <button type="button" id="btn-restore-demo" class="utility-btn">
+              <i data-lucide="rotate-ccw" class="utility-icon" aria-hidden="true"></i>
+              <span>Reset Sample Data</span>
+            </button>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Main Workspace -->
+      <div class="workspace">
+        <!-- Top Navigation Bar -->
+        <header class="topbar">
+          <div class="topbar-left">
+            <button
+              type="button"
+              id="btn-mobile-menu"
+              class="icon-btn mobile-only"
+              aria-label="Open navigation menu"
+              aria-expanded="false"
+            >
+              <i data-lucide="menu" aria-hidden="true"></i>
+            </button>
+            <div class="topbar-breadcrumb">
+              <span class="breadcrumb-root">Workspace</span>
+              <span class="breadcrumb-sep" aria-hidden="true">/</span>
+              <h1 id="topbar-title" class="topbar-title">Dashboard</h1>
+            </div>
+          </div>
+
+          <div class="topbar-right">
+            <div class="month-picker-wrap" title="Active reporting month">
+              <label for="global-month-picker" class="sr-only">Active month</label>
+              <button
+                type="button"
+                id="btn-prev-month"
+                class="month-step-btn"
+                aria-label="Previous month"
+              >
+                <i data-lucide="chevron-left" aria-hidden="true"></i>
+              </button>
+              <input
+                type="month"
+                id="global-month-picker"
+                class="month-input"
+                aria-label="Select active month"
+              />
+              <button
+                type="button"
+                id="btn-next-month"
+                class="month-step-btn"
+                aria-label="Next month"
+              >
+                <i data-lucide="chevron-right" aria-hidden="true"></i>
+              </button>
+            </div>
+
+            <button type="button" id="btn-open-add-modal" class="btn btn-primary">
+              <i data-lucide="plus" class="btn-icon" aria-hidden="true"></i>
+              <span>Add Transaction</span>
+            </button>
+
+            <!-- Notification Center Bell -->
+            <div class="notification-wrap">
+              <button
+                type="button"
+                id="btn-notifications-toggle"
+                class="icon-btn notif-bell-btn"
+                aria-label="Notification Center"
+                title="Notification Center"
+              >
+                <i data-lucide="bell" aria-hidden="true"></i>
+                <span id="notif-badge" class="notif-badge" hidden>0</span>
+              </button>
+              <div id="notif-dropdown" class="notif-dropdown" hidden></div>
+            </div>
+          </div>
+        </header>
+
+        <!-- Dynamic View Viewport -->
+        <main class="main-content" id="main-content">
+          <section id="view-home" class="view-panel" hidden></section>
+          <section id="view-dashboard" class="view-panel is-active" aria-labelledby="topbar-title"></section>
+          <section id="view-transactions" class="view-panel" hidden></section>
+          <section id="view-analytics" class="view-panel" hidden></section>
+          <section id="view-budget" class="view-panel" hidden></section>
+          <section id="view-bank" class="view-panel" hidden></section>
+          <section id="view-guardian" class="view-panel" hidden></section>
+          <section id="view-bills" class="view-panel" hidden></section>
+          <section id="view-goals" class="view-panel" hidden></section>
+          <section id="view-settings" class="view-panel" hidden></section>
+        </main>
+      </div>
+    </div>
+
+    <!-- Add / Edit Transaction Modal -->
+    <div
+      id="transaction-modal"
+      class="modal-overlay"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modal-title"
+      hidden
+    >
+      <div class="modal-card">
+        <div class="modal-header">
+          <h2 id="modal-title" class="modal-title">Add Transaction</h2>
+          <button
+            type="button"
+            id="btn-close-modal"
+            class="icon-btn"
+            aria-label="Close modal"
+          >
+            <i data-lucide="x" aria-hidden="true"></i>
+          </button>
+        </div>
+
+        <form id="transaction-form" class="modal-form" novalidate>
+          <input type="hidden" id="tx-id" name="id" />
+
+          <!-- Type Segmented Toggle -->
+          <div class="form-group">
+            <span class="form-label">Transaction Type</span>
+            <div class="segmented-control" role="radiogroup" aria-label="Transaction Type">
+              <button
+                type="button"
+                class="segment-btn is-active"
+                data-tx-type="expense"
+                aria-pressed="true"
+              >
+                Expense
+              </button>
+              <button
+                type="button"
+                class="segment-btn"
+                data-tx-type="income"
+                aria-pressed="false"
+              >
+                Income
+              </button>
+            </div>
+            <input type="hidden" id="tx-type" name="type" value="expense" />
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="tx-title" class="form-label">Title</label>
+              <input
+                type="text"
+                id="tx-title"
+                name="title"
+                class="form-input"
+                placeholder="e.g., Grocery Shopping"
+                maxlength="80"
+                required
+              />
+              <span class="field-error" id="err-tx-title" aria-live="polite"></span>
+            </div>
+
+            <div class="form-group">
+              <label for="tx-amount" class="form-label">Amount ($)</label>
+              <input
+                type="number"
+                id="tx-amount"
+                name="amount"
+                class="form-input mono-input"
+                placeholder="0.00"
+                step="0.01"
+                min="0.01"
+                required
+              />
+              <span class="field-error" id="err-tx-amount" aria-live="polite"></span>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="tx-category" class="form-label">Category</label>
+              <select id="tx-category" name="category" class="form-select" required></select>
+              <span class="field-error" id="err-tx-category" aria-live="polite"></span>
+            </div>
+
+            <div class="form-group">
+              <label for="tx-date" class="form-label">Date</label>
+              <input type="date" id="tx-date" name="date" class="form-input mono-input" required />
+              <span class="field-error" id="err-tx-date" aria-live="polite"></span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="tx-description" class="form-label">
+              Description <span class="label-optional">(Optional)</span>
+            </label>
+            <textarea
+              id="tx-description"
+              name="description"
+              class="form-textarea"
+              rows="2"
+              maxlength="240"
+              placeholder="Add notes or context for this transaction"
+            ></textarea>
+            <span class="field-error" id="err-tx-description" aria-live="polite"></span>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" id="btn-cancel-modal" class="btn btn-secondary">
+              Cancel
+            </button>
+            <button type="submit" id="btn-submit-tx" class="btn btn-primary">
+              Save Transaction
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Confirm Delete / Reset Modal -->
+    <div
+      id="confirm-modal"
+      class="modal-overlay"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="confirm-title"
+      hidden
+    >
+      <div class="modal-card modal-card-sm">
+        <div class="modal-header">
+          <h2 id="confirm-title" class="modal-title">Confirm Action</h2>
+          <button
+            type="button"
+            id="btn-close-confirm"
+            class="icon-btn"
+            aria-label="Close confirmation"
+          >
+            <i data-lucide="x" aria-hidden="true"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p id="confirm-message" class="confirm-text"></p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" id="btn-cancel-confirm" class="btn btn-secondary">
+            Cancel
+          </button>
+          <button type="button" id="btn-accept-confirm" class="btn btn-danger">
+            Delete
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div id="toast-region" class="toast-region" aria-live="polite" aria-atomic="true"></div>
+
+    <!-- Application Entry Module -->
+    <script type="module" src="./js/app.js"></script>
+  </body>
+</html>
